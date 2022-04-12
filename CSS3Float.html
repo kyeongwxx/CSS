@@ -1,0 +1,182 @@
+<!-- float 프로퍼티는 주로 레이아웃을 구성할 때 블록 레벨 요소를 가로 정렬하기 위해 사용되는 중요한 기법이다.
+
+float 프로퍼티는 본래 아래 예제와 같이 이미지와 텍스트가 있을 때, 이미지 주위를 텍스트로 감싸기 위해 만들어진 것이다. -->
+
+<!-- float 프로퍼티는 해당 요소를 다음 요소 위에 떠 있게(부유하게) 한다. 여기서 떠 있다는 의미는 요소가 기본 레이아웃
+흐름에서 벗어나 요소릐 모서리가 페이지의 왼쪽이나 오른쪽으로 이동하는 것이다. float 프로퍼티를 사용할 때 요소의
+위치를 고정시키는 position: absolute;를 사용해선 안 된다.
+
+- none: 요소를 떠 있게 하지 않는다.(기본값)
+- right: 요소를 오른 쪽으로 이동시킨다.
+- left: 요소를 왼 쪽으로 이동시킨다. -->
+
+<!-- 1. 정렬
+- float 프로퍼티를 사용하지 않은 블록 요소들은 수직으로 정렬된다. float: left; 프로퍼티를 사용하면 왼 쪽부터 가로
+  정렬되고, float: right; 프로퍼티를 사용하면 오른 쪽부터 가로 정렬된다.
+- 오른 쪽 가로 정렬의 경우, 먼저 기술된 요소가 가장 오른쪽에 출력되므로 출력 순서가 역순이 된다.
+- float 프로퍼티는 좌측, 우측 가로 정렬만 할 수 있다. 중앙 가로 정렬은 margin 프로퍼티를 사용해야 한다. -->
+
+<!-- 2. width
+- width 프로퍼티의 기본값은 100% 이므로 width 값을 지정하지 않은 block 요소는 부모 요소의 가로폭을 가득 채운다.
+- width 프로퍼티를 선언하지 않은 block 레벨 요소에 float 프로퍼티가 선언되면 width가 inline 요소와 같이 content에
+맞게 최소화되고 다음 요소 위에 떠 있게(부유하게) 된다. -->
+
+<!-- - 예제를 살펴보면 d1 클래스 요소에는 float: left;를 선언하였고 d2 클래스 요소에는 float을 선언하지 않았다. 이 때
+  d1 클래스 요소는 width가 inline 요소와 같이 content 에 맞게 최소화되고 다음 요소인 d2 클래스 요소 위에 떠 있게
+  된다. 주의할 것은 d1 클래스 요소가 d2 클래스 요소 위에 떠 있게 되어도 d2 클래스 요소의 width는 d1 클래스 요소가
+  차지한 width만큼 줄어들지 않고 100%를 유지한다는 것이다. 이는 d2 클래스 요소는 float을 선언하지 않았기 때문에
+  본래의 width를 유지하기 때문이다. 따라서 d2 클래스 요소는 본래의 width(100%)를 유지한 상태에서 d1 클래스 요소가
+  그 위에 위치한다. -->
+
+<!-- 3. float 프로퍼티 관련 문제 해결 방법
+
+3.1 float 프로퍼티가 선언된 요소와 float 프로퍼티가 선언되지 않은 요소 간 margin이 사라지는 문제
+- 위 예제를 보면 두 요소는 차례대로 정렬된 것처럼 보이지만 사실은 float 프로퍼티가 선언된 요소가 다음 요소 위에
+  떠 있는(부유하고 있는) 상태이다. 따라서 두 요소 간의 margin은 제대로 표현되지 않는다. 이것은 두 번째 요소에
+  float 프로퍼티를 선언하지 않았기 때문에 발생하는 박스 모델 상의 문제이다. 이 문제를 해결하는 가장 쉬운 방법은
+  float 프로퍼티를 선언하지 않은 요소에 overflow: hidden; 프로퍼티를 선언하는 것이다.
+- overflow: hidden; 프로퍼티는 자식 요소가 부모 요소의 영역보다 클 경우 넘치는 부분을 안 보이게 해주는 역할을 하는데
+  여기서는 float 프로퍼티가 없어서 제대로 표현되지 못하는 요소를 제대로 출력해준다. -->
+
+<!-- 3.2 float 프로퍼티가 선언된 자식 요소를 포함하는 부모 요소의 높이가 정상적으로 반영되지 않는 문제
+- 예제를 보면 float 프로퍼티가 선언된 두 개의 자식 요소를 포함하는 부모 요소의 높이가 정상적인 값을 가지지 못하는
+  문제가 발생한다. float 요소는 일반적인 흐름 상에 존재하지 않기 때문에 float 요소의 높이를 알 수 없기 때문인데
+  이 문제는 부모 요소 이후에 위치하는 요소의 정렬에 문제를 발생시킨다.
+- 이 문제를 해결하는 가장 쉬운 방법은 float 프로퍼티가 선언된 자식 요소의 부모 요소에 overflow: hidden; 프로퍼티를
+  선언하는 것이다.
+- 또 다른 방법은 ::after 가상 요소 선택자를 이용하는 것이다. 부모 요소에 clearfix 클래스만 추가하거나, 해당 요소를
+  선택하여 클리어 문법을 선언하면 된다. -->
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        /* img {
+            float: left;
+            margin-right: 10px;
+        } */
+        /* .box {
+            color: white;
+            font-weight: bold;
+            font-size: 50px;
+            border-radius: 6px;
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            padding: 10px;
+        }
+        .d1 {background: red;}
+        .d2 {background: orange;}
+        .d3 {background: red;}
+        .d4 {background: orange;}
+        .d1, .d2 {
+            float: left;
+        }
+        .d3, .d4 {
+            float: right;
+        } */
+
+        /* .box {
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+            line-height: 50px;
+            height: 50px;
+            margin: 0 10px;
+            padding: 10px;
+        }
+
+        .d1 {
+            background: red;
+        }
+
+        .d2 {
+            background: orange;
+        } */
+
+        /* .box {
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+            line-height: 50px;
+            height: 50px;
+            margin: 0 10px;
+            padding: 10px;
+        }
+
+        .d1 {
+            background: red;
+            float: left;
+        }
+
+        .d2 {
+            background: orange;
+            overflow: hidden;
+        } */
+        .container {
+            color: white;
+            text-align: center;
+            padding: 10px;
+            background-color: #def0c2;
+            overflow: hidden;
+        }
+        .clearfix:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .d1, .d2 {
+            float: left;
+            width: 50%;
+            padding: 20px 0;
+        }
+        .d1 {
+            background-color: #59b1f6;
+        }
+        .d2 {
+            background-color: #ffb5b4;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <!-- <img src="https://poiemaweb.com/img/doug.jpg">
+    <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.</div> -->
+
+    <!-- <div class="container">
+        <div class="box d1"> 1 </div>
+        <div class="box d2"> 2 </div>
+        <div class="box d3"> 3 </div>
+        <div class="box d4"> 4 </div>
+    </div> -->
+
+    <!-- <div class="box d1"> div </div>
+    <div class="box d2"> div </div> -->
+
+    <!-- <div class="box d1"> float: left; </div>
+    <div class="box d2"> div </div> -->
+    <div class="container clearfix">
+        <div class="d1">1</div>
+        <div class="d2">2</div>
+    </div>
+    <div style="background:red; padding:10px; color:white;">3</div>
+
+</body>
+
+</html>
